@@ -894,14 +894,47 @@
                 gap: 20px;
             }
 
-            .portfolio-item .portfolio-overlay {
-                opacity: 1;
-                background: linear-gradient(to top, rgba(10, 10, 26, 0.95), rgba(10, 10, 26, 0.65));
-                padding: 20px;
+            .portfolio-item {
+                aspect-ratio: unset;
+                display: flex;
+                flex-direction: column;
+                border-radius: 20px;
+            }
+
+            .portfolio-item .placeholder {
+                height: 220px;
+                border-radius: 20px 20px 0 0;
             }
 
             .portfolio-item .placeholder img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
                 filter: brightness(0.75);
+                transition: transform 0.35s ease;
+            }
+
+            .portfolio-item:hover .placeholder img {
+                transform: scale(1.03);
+            }
+
+            .portfolio-item .portfolio-overlay {
+                position: relative;
+                inset: auto;
+                background: rgba(10, 10, 26, 0.96);
+                padding: 20px;
+                opacity: 1;
+                border-radius: 0 0 20px 20px;
+                transition: none;
+            }
+
+            .portfolio-overlay h4 {
+                font-size: 1.15rem;
+                margin-bottom: 8px;
+            }
+
+            .portfolio-overlay span {
+                color: var(--text-secondary);
             }
 
             .stats {
@@ -939,6 +972,33 @@
 
             .portfolio-item {
                 min-height: auto;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.95rem;
+            }
+
+            .portfolio-item .placeholder {
+                height: 180px;
+            }
+
+            .portfolio-overlay {
+                padding: 18px;
+            }
+
+            .nav-links {
+                width: calc(100% - 24px);
+                right: 12px;
             }
         }
 
