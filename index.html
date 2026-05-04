@@ -755,6 +755,8 @@
         @media (max-width: 768px) {
             nav {
                 padding: 15px 20px;
+                flex-direction: column;
+                align-items: flex-start;
             }
 
             nav.scrolled {
@@ -762,7 +764,25 @@
             }
 
             .nav-links {
-                display: none;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                justify-content: center;
+                margin-top: 12px;
+            }
+
+            .nav-links li {
+                width: auto;
+            }
+
+            .hero {
+                padding: 70px 16px;
+            }
+
+            .hero-content {
+                width: 100%;
+                max-width: 580px;
+                margin: 0 auto;
             }
 
             .hero h1 {
@@ -771,11 +791,18 @@
 
             .hero p {
                 font-size: 1.1rem;
+                max-width: 100%;
             }
 
             .hero-buttons {
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                text-align: center;
             }
 
             .section-header h2 {
@@ -784,18 +811,49 @@
 
             .services-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .portfolio-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             .stats {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .contact {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .contact-details {
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .contact-item {
+                width: 100%;
+            }
+
+            .contact-form {
+                padding: 30px 20px;
             }
 
             .about-image .image-frame {
                 font-size: 5rem;
+            }
+
+            .about-image,
+            .about-content {
+                width: 100%;
+            }
+
+            .portfolio-item {
+                min-height: auto;
             }
         }
 
@@ -862,15 +920,15 @@
                 <p>Mert KÜÇÜK olarak, dijital projeler ve kreatif çözümler üretme konusunda tutkuluyum. Modern tasarım anlayışı ve kullanıcı deneyimi odaklı yaklaşımım ile her projede mükemmelliği hedefliyorum.</p>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="number">5+</div>
+                        <div class="number">2+</div>
                         <div class="label">Yıl Deneyim</div>
                     </div>
                     <div class="stat-item">
-                        <div class="number">50+</div>
+                        <div class="number">10+</div>
                         <div class="label">Proje</div>
                     </div>
                     <div class="stat-item">
-                        <div class="number">30+</div>
+                        <div class="number">15+</div>
                         <div class="label">Müşteri</div>
                     </div>
                 </div>
@@ -923,7 +981,7 @@
     <section id="portfolio">
         <div class="section-header reveal">
             <h2>Projeler</h2>
-            <p>Tamamladığım bazı önemli projeler</p>
+            <p>Yapabileceğim projeler</p>
             <div class="gradient-line"></div>
         </div>
         <div class="portfolio-grid">
@@ -1018,7 +1076,7 @@
                             <div class="icon">📍</div>
                             <div class="text">
                                 <span class="label">Konum</span>
-                                <span class="value">Kayseri Merkez</span>
+                                <span class="value">Türkiye/Kayseri/Melikgazi</span>
                             </div>
                         </div>
                         <div style="width:100%;margin-top:15px;">
@@ -1348,34 +1406,3 @@
     </script>
 </body>
 </html>
-<form id="contact-form">
-  <input type="text" name="name" placeholder="Adın" required>
-  <input type="email" name="email" placeholder="Email" required>
-  <textarea name="message" placeholder="Mesaj" required></textarea>
-
-  <button type="submit">Gönder</button>
-</form>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
-<script>
-(function(){
-  emailjs.init("7uBfmQNqOcDVr7Qax");
-})();
-</script>
-<script>
-document.getElementById("contact-form")
-.addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  emailjs.sendForm(
-    "SERVICE_ID",
-    "TEMPLATE_ID",
-    this
-  ).then(() => {
-    alert("Mesaj gönderildi 😎");
-  }, (error) => {
-    alert("Hata oluştu 😢");
-    console.log(error);
-  });
-});
-</script>
