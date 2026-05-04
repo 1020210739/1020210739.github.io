@@ -186,6 +186,59 @@
             list-style: none;
         }
 
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: var(--text-primary);
+        }
+
+        .nav-toggle span,
+        .nav-toggle span::before,
+        .nav-toggle span::after {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 999px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-toggle span::before,
+        .nav-toggle span::after {
+            content: '';
+            position: absolute;
+            left: 0;
+        }
+
+        .nav-toggle span::before {
+            top: -7px;
+        }
+
+        .nav-toggle span::after {
+            top: 7px;
+        }
+
+        .nav-toggle.open span {
+            background: transparent;
+        }
+
+        .nav-toggle.open span::before {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .nav-toggle.open span::after {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
@@ -763,16 +816,38 @@
                 padding: 12px 20px;
             }
 
-            .nav-links {
+            .nav-toggle {
                 display: flex;
-                flex-wrap: wrap;
-                gap: 12px;
-                justify-content: center;
-                margin-top: 12px;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                gap: 15px;
+                list-style: none;
+                background: rgba(10, 10, 26, 0.98);
+                border-radius: 20px;
+                padding: 20px;
+                margin-top: 15px;
+                width: calc(100% - 32px);
+                max-width: 340px;
+                position: absolute;
+                right: 16px;
+                top: 100%;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            }
+
+            .nav-links.open {
+                display: flex;
             }
 
             .nav-links li {
-                width: auto;
+                width: 100%;
+            }
+
+            .nav-links a {
+                font-size: 1rem;
+                color: var(--text-primary);
             }
 
             .hero {
@@ -893,6 +968,9 @@
     <!-- Navigation -->
     <nav id="navbar">
         <div class="logo">Mert KÜÇÜK</div>
+        <button class="nav-toggle" aria-label="Menü">
+            <span></span>
+        </button>
         <ul class="nav-links">
             <li><a href="#home">Ana Sayfa</a></li>
             <li><a href="#about">Hakkımda</a></li>
@@ -1244,6 +1322,24 @@
                 navbar.classList.remove('scrolled');
             }
         });
+
+        // Mobile hamburger menu
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('open');
+                navLinks.classList.toggle('open');
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navToggle.classList.remove('open');
+                    navLinks.classList.remove('open');
+                });
+            });
+        }
 
         // Smooth scroll for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
