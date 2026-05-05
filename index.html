@@ -742,6 +742,13 @@
             resize: vertical;
         }
 
+        .form-feedback {
+            margin-top: 18px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            min-height: 1.4em;
+        }
+
         .contact-form .btn {
             width: 100%;
         }
@@ -1247,6 +1254,7 @@
                         <textarea id="message" name="message" placeholder="Mesajınızı yazın..." required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Gönder</button>
+                    <div id="formFeedback" class="form-feedback" aria-live="polite"></div>
                 </form>
             </div>
         </div>
@@ -1276,9 +1284,13 @@
     <p>© 2026 Mert KÜÇÜK. Tüm hakları saklıdır.</p>
     </footer>
 
-    <script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2.0/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
-        emailjs.init("7uBfmQNqOcDVr7Qax");
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.emailjs && typeof window.emailjs.init === 'function') {
+                emailjs.init('7uBfmQNqOcDVr7Qax');
+            }
+        });
     </script>
     <script>
         // Parallax scroll effect
@@ -1503,36 +1515,60 @@
         window.addEventListener('load', revealOnScroll);
 
         // Form submission
+        const formFeedback = document.getElementById('formFeedback');
         const contactForm = document.getElementById('contactForm');
-        
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-            
-            if (!name || !message) {
-                alert('Lütfen adınızı ve mesajınızı yazın.');
+
+        function showFeedback(message, isError = false) {
+            if (!formFeedback) {
+                alert(message);
                 return;
             }
-            
-            if (typeof emailjs === 'undefined') {
-                console.error('EmailJS yüklü değil.');
-                alert('E-posta servisi şu anda kullanılamıyor.');
-                return;
-            }
-            
-            emailjs.sendForm('service_5oj1hoe', 'template_gabrgpq', contactForm)
-                .then(() => {
-                    alert('Mesajınız gönderildi! Teşekkürler.');
-                    contactForm.reset();
-                })
-                .catch((error) => {
-                    console.error('EmailJS Error:', error);
-                    alert('Mesaj gönderilemedi. Lütfen tekrar deneyin.');
-                });
-        });
+            formFeedback.textContent = message;
+            formFeedback.style.color = isError ? '#ff6b6b' : 'var(--accent)';
+        }
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const message = document.getElementById('message').value.trim();
+
+                if (!name || !message) {
+                    showFeedback('Lütfen adınızı ve mesajınızı yazın.', true);
+                    return;
+                }
+
+                if (typeof emailjs === 'undefined' || typeof emailjs.sendForm !== 'function') {
+                    console.error('EmailJS yüklü değil veya desteklenmiyor.');
+                    showFeedback('E-posta servisi şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.', true);
+                    return;
+                }
+
+                const submitButton = contactForm.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Gönderiliyor...';
+                }
+
+                emailjs.sendForm('service_5oj1hoe', 'template_gabrgpq', contactForm)
+                    .then(() => {
+                        showFeedback('Mesajınız gönderildi! Teşekkürler.');
+                        contactForm.reset();
+                    })
+                    .catch((error) => {
+                        console.error('EmailJS Error:', error);
+                        showFeedback('Mesaj gönderilemedi. Lütfen tekrar deneyin.', true);
+                    })
+                    .finally(() => {
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                            submitButton.textContent = 'Gönder';
+                        }
+                    });
+            });
+        }
 
         // Typing effect for hero subtitle
         const heroText = document.querySelector('.hero-subtitle');
